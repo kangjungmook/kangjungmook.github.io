@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <title>수빈아 데이트하자</title>
-  <meta name="description" content="수빈에게 온 초대장">
+  <meta name="description" content="수빈이한테 온 초대장">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -275,23 +275,23 @@
     </svg>
 
     <section class="question" id="question">
-      <p class="eyebrow">수빈에게 초대장이 도착했어요</p>
+      <p class="eyebrow">수빈이한테 초대장 왔다~</p>
       <h1 id="title">수빈아 <em>데이트</em>하자~~</h1>
       <p class="lead">11월 8일에 알지~?</p>
 
       <div class="actions">
         <span class="slot" id="slot">
-          <button type="button" class="btn btn--primary" id="yes">좋아요</button>
+          <button type="button" class="btn btn--primary" id="yes">좋아</button>
         </span>
-        <button type="button" class="btn btn--quiet" id="think">조금 더 생각해볼게요</button>
+        <button type="button" class="btn btn--quiet" id="think">좀 더 생각해볼게</button>
       </div>
 
       <p class="hint" id="hint" aria-live="polite"></p>
     </section>
 
     <section class="answer" id="answer" hidden>
-      <h2 id="answerTitle" tabindex="-1">메롱~ 결국 눌렀네요?</h2>
-      <p>도망 다니는 버튼 잡느라 고생했어요. 11월 8일 약속은 이제 취소 안 돼요. 어디 갈지 생각해두는 건 수빈이 숙제예요!</p>
+      <h2 id="answerTitle" tabindex="-1">메롱~ 결국 눌렀네?</h2>
+      <p>도망 다니는 버튼 잡느라 고생했지? 11월 8일 약속은 이제 취소 안 돼. 어디 갈지 생각해두는 건 수빈이 숙제야!</p>
       <button type="button" class="btn btn--primary" id="share">메롱하고 답장 보내기</button>
     </section>
   </main>
@@ -398,19 +398,19 @@
 
     /* ---------- 도망가는 "좋아요" ---------- */
     const dodgeLines = [
-      "어, 방금 버튼이 움직인 것 같은데요.",
-      "손이 미끄러졌나 봐요. 다시 눌러봐요.",
-      "버튼도 부끄러운가 봐요.",
-      "거의 잡았어요!",
-      "저 버튼, 생각보다 빨라요.",
-      "11월 8일, 비워뒀죠?",
-      "도망가도 마음은 같아요.",
-      "한 번만 더 해봐요.",
+      "어? 방금 버튼 움직인 것 같은데?",
+      "손이 미끄러졌나 봐. 다시 눌러봐~",
+      "버튼도 부끄러운가 봐.",
+      "거의 잡았다!",
+      "저 버튼 생각보다 빠르지?",
+      "11월 8일 비워뒀지?",
+      "도망가도 마음은 같아.",
+      "한 번만 더 해봐~",
     ];
     const thinkLines = [
-      "생각은 3초면 충분하다고 들었어요.",
-      "그래도 저는 기다릴 수 있어요.",
-      "…근데 오래는 못 기다려요.",
+      "생각은 3초면 충분하다던데?",
+      "그래도 난 기다릴 수 있어.",
+      "…근데 오래는 못 기다려.",
     ];
 
     let dodges = 0, thinks = 0, free = false, lastDodge = 0, thinkAccepts = false;
@@ -510,7 +510,7 @@
       thinks++;
       if (thinks >= thinkLines.length) {
         thinkAccepts = true;
-        think.textContent = "알겠어요, 11월 8일에 만나요";
+        think.textContent = "알겠어, 11월 8일에 만나";
         think.classList.replace("btn--quiet", "btn--primary");
       }
     });
@@ -525,11 +525,11 @@
     }
 
     $("share").addEventListener("click", async (e) => {
-      const text = "메롱~ 결국 눌렀어요. 11월 8일에 데이트해요!";
+      const text = "메롱~ 결국 눌렀어. 11월 8일에 데이트하자!";
       try {
         if (navigator.share) { await navigator.share({ text }); return; }
         await navigator.clipboard.writeText(text);
-        e.target.textContent = "복사했어요. 메신저에 붙여넣어 보내요";
+        e.target.textContent = "복사했어. 메신저에 붙여넣어서 보내!";
       } catch (_) { /* 공유 취소 시 아무것도 하지 않음 */ }
     });
 
