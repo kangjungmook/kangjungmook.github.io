@@ -188,12 +188,6 @@
       transform: translateY(-2px);
     }
 
-    .btn--quiet {
-      background: transparent;
-      color: var(--text-muted);
-      box-shadow: inset 0 0 0 1.5px var(--line);
-    }
-    .btn--quiet:hover { color: var(--text); box-shadow: inset 0 0 0 1.5px var(--accent-soft); }
 
     .slot { display: inline-block; }
 
@@ -283,7 +277,6 @@
         <span class="slot" id="slot">
           <button type="button" class="btn btn--primary" id="yes">좋아</button>
         </span>
-        <button type="button" class="btn btn--quiet" id="think">좀 더 생각해볼게</button>
       </div>
 
       <p class="hint" id="hint" aria-live="polite"></p>
@@ -300,7 +293,7 @@
 
   <script>
     const $ = (id) => document.getElementById(id);
-    const yes = $("yes"), slot = $("slot"), think = $("think"), hint = $("hint"), fx = $("fx");
+    const yes = $("yes"), slot = $("slot"), hint = $("hint"), fx = $("fx");
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     /* ---------- 하트 ---------- */
@@ -407,13 +400,13 @@
       "도망가도 마음은 같아.",
       "한 번만 더 해봐~",
     ];
-    const thinkLines = [
-      "생각은 3초면 충분하다던데?",
-      "그래도 난 기다릴 수 있어.",
-      "…근데 오래는 못 기다려.",
+    // 한참 도망가도 못 잡을 때만 나오는 아주 작은 단서
+    const clueLines = [
+      "근데 저 위에 하트, 간지럼 타게 생기지 않았어?",
+      "하트가 뭔가 알고 있는 눈치야…",
     ];
 
-    let dodges = 0, thinks = 0, free = false, lastDodge = 0, thinkAccepts = false;
+    let dodges = 0, free = false, lastDodge = 0, taps = 0, tapTimer = 0;
 
     function release() {
       const r = yes.getBoundingClientRect();
@@ -456,7 +449,7 @@
       if (!free) release();
       const { pad, maxX, maxY } = bounds();
       const w = yes.offsetWidth, h = yes.offsetHeight;
-      const avoids = [think, hint].map((el) => el.getBoundingClientRect());
+      const avoids = [hint, $("title"), document.querySelector(".lead")].map((el) => el.getBoundingClientRect());
 
       let best = null, bestDist = -1;
       for (let i = 0; i < 40; i++) {
@@ -472,7 +465,9 @@
       if (best) place(best.x, best.y);
 
       dodges++;
-      hint.textContent = dodgeLines[(dodges - 1) % dodgeLines.length];
+      hint.textContent = dodges >= 10 && dodges % 3 === 0
+        ? clueLines[(dodges / 3) % clueLines.length]
+        : dodgeLines[(dodges - 1) % dodgeLines.length];
     }
 
     function clamp() {
@@ -503,15 +498,19 @@
       accept();
     });
 
-    // "생각해볼게요"를 3번 누르면 11월 8일에 만나자는 대답으로 바뀌어요.
-    think.addEventListener("click", () => {
-      if (thinkAccepts) { accept(); return; }
-      hint.textContent = thinkLines[thinks];
-      thinks++;
-      if (thinks >= thinkLines.length) {
-        thinkAccepts = true;
-        think.textContent = "알겠어, 11월 8일에 만나";
-        think.classList.replace("btn--quiet", "btn--primary");
+    // 비밀 통로: 위의 하트 캐릭터를 3번 간질이면(연속 탭) 수락돼요.
+    const tapLines = ["어? 간지러워~", "ㅋㅋㅋ 그만 간질여~"];
+    $("mascot").addEventListener("click", () => {
+      if ($("question").hidden) return;
+      taps++;
+      clearTimeout(tapTimer);
+      tapTimer = setTimeout(() => { taps = 0; }, 2500); // 천천히 누르면 다시 처음부터
+      if (taps >= 3) { accept(); return; }
+      hint.textContent = tapLines[taps - 1];
+      if (!reduceMotion) {
+        $("mascot").animate(
+          [{ rotate: "0deg" }, { rotate: "-14deg" }, { rotate: "14deg" }, { rotate: "0deg" }],
+          { duration: 360, easing: "ease-in-out" });
       }
     });
 
