@@ -119,6 +119,8 @@
     .mascot .face { fill: oklch(32% 0.05 10); }
     .mascot .cheek { fill: var(--blush); opacity: 0.7; }
     .mascot .eye-happy { display: none; stroke: oklch(32% 0.05 10); fill: none; stroke-width: 1.6; stroke-linecap: round; }
+    .mascot .tongue { display: none; fill: oklch(78% 0.13 8); }
+    .mascot.is-happy .tongue { display: block; }
     .mascot.is-happy .eye-open { display: none; }
     .mascot.is-happy .eye-happy { display: block; }
     .mascot.is-happy { animation-duration: 0.8s; }
@@ -268,6 +270,7 @@
       </g>
       <ellipse class="cheek" cx="8.500" cy="16.500" rx="2.200" ry="1.400"/>
       <ellipse class="cheek" cx="23.500" cy="16.500" rx="2.200" ry="1.400"/>
+      <path class="tongue" d="M14.800 18.300v1.900a1.200 1.200 0 0 0 2.400 0v-1.900z"/>
       <path d="M14 17.200q2 2 4 0" fill="none" stroke="oklch(32% 0.05 10)" stroke-width="1.400" stroke-linecap="round"/>
     </svg>
 
@@ -287,9 +290,9 @@
     </section>
 
     <section class="answer" id="answer" hidden>
-      <h2 id="answerTitle" tabindex="-1">고마워요, 정말 기뻐요.</h2>
-      <p>11월 8일에 만나요. 가고 싶은 곳이 있다면 먼저 말해줘요.</p>
-      <button type="button" class="btn btn--primary" id="share">기쁜 소식 전하기</button>
+      <h2 id="answerTitle" tabindex="-1">메롱~ 결국 눌렀네요?</h2>
+      <p>도망 다니는 버튼 잡느라 고생했어요. 11월 8일 약속은 이제 취소 안 돼요. 어디 갈지 생각해두는 건 수빈이 숙제예요!</p>
+      <button type="button" class="btn btn--primary" id="share">메롱하고 답장 보내기</button>
     </section>
   </main>
 
@@ -522,7 +525,7 @@
     }
 
     $("share").addEventListener("click", async (e) => {
-      const text = "좋아요, 11월 8일에 데이트해요!";
+      const text = "메롱~ 결국 눌렀어요. 11월 8일에 데이트해요!";
       try {
         if (navigator.share) { await navigator.share({ text }); return; }
         await navigator.clipboard.writeText(text);
