@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>저랑 데이트 할래요?</title>
+  <meta name="description" content="딱 한 가지만 물어볼게요.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* 색상: 로즈 계열 브랜드 색(hue 18)을 은은하게 섞은 틴티드 뉴트럴 */
+      --bg: oklch(97.5% 0.012 25);
+      --surface: oklch(94.5% 0.02 25);
+      --text: oklch(27% 0.025 20);
+      --text-muted: oklch(46% 0.025 20);
+      --line: oklch(86% 0.025 22);
+      --accent: oklch(52% 0.16 18);
+      --accent-hover: oklch(46% 0.16 18);
+      --on-accent: oklch(98% 0.01 25);
+      --focus: oklch(52% 0.16 18);
+
+      /* 간격: 4px 기반, 8px 배수 우선 */
+      --s-1: 4px;
+      --s-2: 8px;
+      --s-3: 12px;
+      --s-4: 16px;
+      --s-6: 24px;
+      --s-8: 32px;
+      --s-12: 48px;
+      --s-16: 64px;
+      --s-24: 96px;
+
+      /* 타이포: 모듈러 스케일 1.25, clamp()로 반응형 */
+      --step--1: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
+      --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+      --step-1: clamp(1.25rem, 1.15rem + 0.5vw, 1.4rem);
+      --step-3: clamp(1.95rem, 1.5rem + 2.2vw, 3.05rem);
+      --step-4: clamp(2.4rem, 1.7rem + 3.6vw, 3.8rem);
+
+      --font-serif: "Gowun Batang", "Noto Serif KR", "Apple SD Gothic Neo", serif;
+      --font-sans: "Noto Sans KR", "Apple SD Gothic Neo", system-ui, sans-serif;
+
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* 다크모드: 단순 반전이 아니라 따뜻한 짙은 회색으로 재설계 */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: oklch(22% 0.014 22);
+        --surface: oklch(27% 0.018 22);
+        --text: oklch(92% 0.012 25);
+        --text-muted: oklch(76% 0.02 22);
+        --line: oklch(35% 0.02 22);
+        --accent: oklch(74% 0.115 18);
+        --accent-hover: oklch(80% 0.1 18);
+        --on-accent: oklch(22% 0.02 20);
+        --focus: oklch(80% 0.1 18);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: var(--step-0);
+      line-height: 1.7;
+      display: grid;
+      place-items: center;
+      padding: var(--s-8) var(--s-4);
+      overflow-x: hidden;
+      word-break: keep-all;
+    }
+
+    main {
+      width: 100%;
+      max-width: 36rem;
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 var(--s-6);
+      font-size: var(--step--1);
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    h1 {
+      margin: 0 0 var(--s-6);
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: var(--step-4);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      text-wrap: balance;
+    }
+
+    .lead {
+      margin: 0 auto var(--s-12);
+      max-width: 28rem;
+      color: var(--text-muted);
+      text-wrap: balance;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: var(--s-4);
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      min-height: 48px;
+      min-width: 48px;
+      padding: var(--s-3) var(--s-8);
+      border-radius: 999px;
+      font: 500 var(--step-0)/1.4 var(--font-sans);
+      transition: transform 0.2s var(--ease), background-color 0.2s var(--ease), opacity 0.2s var(--ease);
+    }
+    .btn:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .btn--primary {
+      background: var(--accent);
+      color: var(--on-accent);
+    }
+    .btn--primary:hover { background: var(--accent-hover); }
+
+    .btn--quiet {
+      background: transparent;
+      color: var(--text-muted);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .btn--quiet:hover { color: var(--text); box-shadow: inset 0 0 0 1px var(--text-muted); }
+
+    /* 자리 표시: "좋아요" 버튼이 떠나도 레이아웃이 흔들리지 않도록 */
+    .slot { display: inline-block; }
+
+    /* 도망 다니는 버튼 */
+    .yes-free {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 10;
+      transition: transform 0.28s var(--ease), background-color 0.2s var(--ease);
+      will-change: transform;
+    }
+
+    .hint {
+      min-height: calc(var(--step-0) * 1.7);
+      margin: var(--s-8) 0 0;
+      font-size: var(--step--1);
+      color: var(--text-muted);
+    }
+
+    /* 성공 화면 */
+    .answer[hidden], .question[hidden] { display: none; }
+    .answer h2 {
+      margin: 0 0 var(--s-6);
+      font-family: var(--font-serif);
+      font-size: var(--step-3);
+      line-height: 1.3;
+      text-wrap: balance;
+    }
+    .answer h2:focus { outline: none; }
+    .answer p { margin: 0 auto var(--s-12); max-width: 28rem; color: var(--text-muted); text-wrap: balance; }
+
+    .hearts { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+    .heart {
+      position: absolute;
+      bottom: -48px;
+      color: var(--accent);
+      opacity: 0;
+      animation: rise 3.6s var(--ease) forwards;
+    }
+    @keyframes rise {
+      0%   { transform: translateY(0) scale(0.8); opacity: 0; }
+      15%  { opacity: 0.8; }
+      100% { transform: translateY(-85vh) scale(1.1); opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn, .yes-free { transition: none; }
+      .heart { display: none; }
+    }
+
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="question" id="question">
+      <p class="eyebrow">딱 한 가지만 물어볼게요</p>
+      <h1 id="title">저랑 데이트 할래요?</h1>
+      <p class="lead">맛있는 거 먹고, 같이 걷고, 시시한 얘기를 오래 하고 싶어요.</p>
+
+      <div class="actions">
+        <span class="slot" id="slot">
+          <button type="button" class="btn btn--primary" id="yes">좋아요</button>
+        </span>
+        <button type="button" class="btn btn--quiet" id="think">조금 더 생각해볼게요</button>
+      </div>
+
+      <p class="hint" id="hint" aria-live="polite"></p>
+    </section>
+
+    <section class="answer" id="answer" hidden>
+      <h2 id="answerTitle" tabindex="-1">고마워요, 정말 기뻐요.</h2>
+      <p>이제 언제, 어디서 만날지만 정하면 돼요. 가고 싶은 곳이 있다면 먼저 말해줘요.</p>
+      <button type="button" class="btn btn--primary" id="share">기쁜 소식 전하기</button>
+    </section>
+  </main>
+
+  <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+  <script>
+    // 여기만 바꾸면 돼요. name을 채우면 질문 앞에 이름이 붙어요. (예: "지민아, 저랑 데이트 할래요?")
+    const CONFIG = {
+      name: "",
+      // 도망 횟수가 이 값에 닿으면 버튼이 지쳐서 멈춰요.
+      maxDodges: 7,
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const yes = $("yes"), slot = $("slot"), think = $("think"), hint = $("hint");
+    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (CONFIG.name) $("title").textContent = `${CONFIG.name}, 저랑 데이트 할래요?`;
+
+    const dodgeLines = [
+      "어, 방금 버튼이 움직인 것 같은데요.",
+      "손이 미끄러졌나 봐요. 다시 눌러봐요.",
+      "버튼도 부끄러운가 봐요.",
+      "거의 잡았어요!",
+      "저 버튼, 생각보다 빨라요.",
+      "슬슬 숨이 차는 것 같아요.",
+      "한 번만 더 도망가고 쉴게요.",
+    ];
+    const thinkLines = [
+      "생각은 3초면 충분하다고 들었어요.",
+      "그래도 저는 기다릴 수 있어요.",
+      "…근데 오래는 못 기다려요.",
+    ];
+
+    let dodges = 0, thinks = 0, free = false, tired = false, lastDodge = 0;
+
+    // 버튼을 자리 표시 위치에 고정한 뒤 화면 전체를 돌아다닐 수 있게 전환
+    function release() {
+      const r = yes.getBoundingClientRect();
+      slot.style.width = r.width + "px";
+      slot.style.height = r.height + "px";
+      yes.style.transition = "none";
+      yes.classList.add("yes-free");
+      place(r.left, r.top);
+      yes.getBoundingClientRect(); // 리플로우로 시작 위치 확정
+      yes.style.transition = "";
+      free = true;
+    }
+
+    function place(x, y) {
+      yes.dataset.x = x;
+      yes.dataset.y = y;
+      yes.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    function bounds() {
+      const pad = 16;
+      const vw = document.documentElement.clientWidth;
+      const vh = window.innerHeight;
+      return {
+        pad,
+        maxX: Math.max(pad, vw - yes.offsetWidth - pad),
+        maxY: Math.max(pad, vh - yes.offsetHeight - pad),
+      };
+    }
+
+    function dodge(px, py) {
+      if (tired) return;
+      const now = performance.now();
+      if (now - lastDodge < 140) return;
+      lastDodge = now;
+
+      if (!free) release();
+      const { pad, maxX, maxY } = bounds();
+      const w = yes.offsetWidth, h = yes.offsetHeight;
+      const avoid = think.getBoundingClientRect();
+
+      let best = null, bestDist = -1;
+      for (let i = 0; i < 40; i++) {
+        const x = pad + Math.random() * (maxX - pad);
+        const y = pad + Math.random() * (maxY - pad);
+        const dist = Math.hypot(x + w / 2 - px, y + h / 2 - py);
+        const overlaps = x < avoid.right + 8 && x + w > avoid.left - 8 &&
+                         y < avoid.bottom + 8 && y + h > avoid.top - 8;
+        if (overlaps) continue;
+        if (dist > bestDist) { best = { x, y }; bestDist = dist; }
+        if (dist > 220) break;
+      }
+      if (best) place(best.x, best.y);
+
+      dodges++;
+      hint.textContent = dodgeLines[Math.min(dodges - 1, dodgeLines.length - 1)];
+      if (dodges >= CONFIG.maxDodges) settle();
+    }
+
+    function settle() {
+      tired = true;
+      yes.textContent = "좋아요 (이제 눌러도 돼요)";
+      hint.textContent = "버튼이 지쳐서 멈췄어요. 이제 잡을 수 있어요.";
+      // 글자가 길어져 화면 밖으로 나가지 않도록 위치 보정
+      requestAnimationFrame(clamp);
+    }
+
+    function clamp() {
+      if (!free) return;
+      const { pad, maxX, maxY } = bounds();
+      const x = Math.min(Math.max(+yes.dataset.x, pad), maxX);
+      const y = Math.min(Math.max(+yes.dataset.y, pad), maxY);
+      place(x, y);
+    }
+
+    // 마우스: 버튼에 가까워지면 피함
+    window.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse" || tired) return;
+      const r = yes.getBoundingClientRect();
+      const dx = Math.max(r.left - e.clientX, 0, e.clientX - r.right);
+      const dy = Math.max(r.top - e.clientY, 0, e.clientY - r.bottom);
+      if (Math.hypot(dx, dy) < 88) dodge(e.clientX, e.clientY);
+    });
+
+    // 터치: 닿는 순간 피함
+    yes.addEventListener("pointerdown", (e) => {
+      if (tired) return;
+      e.preventDefault();
+      dodge(e.clientX, e.clientY);
+    });
+
+    yes.addEventListener("click", (e) => {
+      // 키보드(Enter/Space)로는 항상 누를 수 있어요. 포인터로는 지치기 전까지 막아요.
+      if (!tired && e.detail !== 0) { e.preventDefault(); return; }
+      accept();
+    });
+
+    think.addEventListener("click", () => {
+      hint.textContent = thinkLines[thinks % thinkLines.length];
+      thinks++;
+    });
+
+    function accept() {
+      $("question").hidden = true;
+      yes.classList.remove("yes-free");
+      $("answer").hidden = false;
+      $("answerTitle").focus();
+      if (!reduceMotion) confetti();
+    }
+
+    function confetti() {
+      const box = $("hearts");
+      for (let i = 0; i < 16; i++) {
+        const h = document.createElement("span");
+        h.className = "heart";
+        h.textContent = "♥";
+        h.style.left = Math.random() * 100 + "%";
+        h.style.fontSize = 16 + Math.round(Math.random() * 3) * 8 + "px";
+        h.style.animationDelay = Math.random() * 1.2 + "s";
+        box.appendChild(h);
+      }
+      setTimeout(() => box.replaceChildren(), 5500);
+    }
+
+    $("share").addEventListener("click", async (e) => {
+      const text = "좋아요, 저랑 데이트해요!";
+      try {
+        if (navigator.share) { await navigator.share({ text }); return; }
+        await navigator.clipboard.writeText(text);
+        e.target.textContent = "복사했어요. 메신저에 붙여넣어 보내요";
+      } catch (_) { /* 공유 취소 시 아무것도 하지 않음 */ }
+    });
+
+    window.addEventListener("resize", clamp);
+  </script>
+</body>
+</html>
