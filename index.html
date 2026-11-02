@@ -8,19 +8,27 @@
   <meta name="description" content="딱 한 가지만 물어볼게요.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* 색상: 로즈 계열 브랜드 색(hue 18)을 은은하게 섞은 틴티드 뉴트럴 */
-      --bg: oklch(97.5% 0.012 25);
-      --surface: oklch(94.5% 0.02 25);
-      --text: oklch(27% 0.025 20);
-      --text-muted: oklch(46% 0.025 20);
-      --line: oklch(86% 0.025 22);
-      --accent: oklch(52% 0.16 18);
-      --accent-hover: oklch(46% 0.16 18);
-      --on-accent: oklch(98% 0.01 25);
-      --focus: oklch(52% 0.16 18);
+      /* 색상: 로즈 계열(hue ~12)을 머금은 틴티드 뉴트럴 + 파스텔 포인트 */
+      --bg: oklch(96.8% 0.022 14);
+      --text: oklch(30% 0.04 10);
+      --text-muted: oklch(46% 0.04 10);
+      --line: oklch(86% 0.04 12);
+      --accent: oklch(54% 0.19 14);
+      --accent-hover: oklch(48% 0.19 14);
+      --accent-soft: oklch(72% 0.14 12);
+      --on-accent: oklch(99% 0.01 14);
+      --shadow: oklch(54% 0.19 14 / 0.35);
+      --focus: oklch(54% 0.19 14);
+      --blush: oklch(80% 0.1 12);
+
+      /* 하트 팔레트 (채도를 낮춘 파스텔) */
+      --h1: oklch(70% 0.15 12);
+      --h2: oklch(80% 0.1 45);
+      --h3: oklch(76% 0.09 330);
+      --h4: oklch(64% 0.18 16);
 
       /* 간격: 4px 기반, 8px 배수 우선 */
       --s-1: 4px;
@@ -31,33 +39,36 @@
       --s-8: 32px;
       --s-12: 48px;
       --s-16: 64px;
-      --s-24: 96px;
 
       /* 타이포: 모듈러 스케일 1.25, clamp()로 반응형 */
       --step--1: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
       --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
-      --step-1: clamp(1.25rem, 1.15rem + 0.5vw, 1.4rem);
-      --step-3: clamp(1.95rem, 1.5rem + 2.2vw, 3.05rem);
-      --step-4: clamp(2.4rem, 1.7rem + 3.6vw, 3.8rem);
+      --step-3: clamp(2rem, 1.55rem + 2.2vw, 3.05rem);
+      --step-4: clamp(2.5rem, 1.8rem + 3.6vw, 3.9rem);
 
-      --font-serif: "Gowun Batang", "Noto Serif KR", "Apple SD Gothic Neo", serif;
+      --font-display: "Jua", "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
       --font-sans: "Noto Sans KR", "Apple SD Gothic Neo", system-ui, sans-serif;
-
       --ease: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    /* 다크모드: 단순 반전이 아니라 따뜻한 짙은 회색으로 재설계 */
+    /* 다크모드: 반전이 아니라 따뜻한 짙은 회색 + 한 톤 낮춘 하트 */
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: oklch(22% 0.014 22);
-        --surface: oklch(27% 0.018 22);
-        --text: oklch(92% 0.012 25);
-        --text-muted: oklch(76% 0.02 22);
-        --line: oklch(35% 0.02 22);
-        --accent: oklch(74% 0.115 18);
-        --accent-hover: oklch(80% 0.1 18);
-        --on-accent: oklch(22% 0.02 20);
-        --focus: oklch(80% 0.1 18);
+        --bg: oklch(22% 0.02 10);
+        --text: oklch(93% 0.015 14);
+        --text-muted: oklch(78% 0.025 12);
+        --line: oklch(36% 0.03 10);
+        --accent: oklch(74% 0.13 14);
+        --accent-hover: oklch(80% 0.11 14);
+        --accent-soft: oklch(66% 0.14 12);
+        --on-accent: oklch(22% 0.03 10);
+        --shadow: oklch(10% 0.02 10 / 0.5);
+        --focus: oklch(80% 0.11 14);
+        --blush: oklch(62% 0.12 12);
+        --h1: oklch(68% 0.12 12);
+        --h2: oklch(74% 0.09 45);
+        --h3: oklch(70% 0.08 330);
+        --h4: oklch(62% 0.14 16);
       }
     }
 
@@ -77,16 +88,43 @@
       padding: var(--s-8) var(--s-4);
       overflow-x: hidden;
       word-break: keep-all;
+      position: relative;
     }
 
     main {
+      position: relative;
+      z-index: 1;
       width: 100%;
       max-width: 36rem;
       text-align: center;
     }
 
+    /* 캐릭터: 두근두근 뛰는 하트 */
+    .mascot {
+      display: block;
+      width: 96px;
+      height: 96px;
+      margin: 0 auto var(--s-6);
+      color: var(--h4);
+      animation: beat 1.4s ease-in-out infinite;
+      transform-origin: 50% 70%;
+    }
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      12% { transform: scale(1.1); }
+      24% { transform: scale(1); }
+      36% { transform: scale(1.06); }
+      50% { transform: scale(1); }
+    }
+    .mascot .face { fill: oklch(32% 0.05 10); }
+    .mascot .cheek { fill: var(--blush); opacity: 0.7; }
+    .mascot .eye-happy { display: none; stroke: oklch(32% 0.05 10); fill: none; stroke-width: 1.6; stroke-linecap: round; }
+    .mascot.is-happy .eye-open { display: none; }
+    .mascot.is-happy .eye-happy { display: block; }
+    .mascot.is-happy { animation-duration: 0.8s; }
+
     .eyebrow {
-      margin: 0 0 var(--s-6);
+      margin: 0 0 var(--s-3);
       font-size: var(--step--1);
       letter-spacing: 0.08em;
       color: var(--text-muted);
@@ -94,12 +132,16 @@
 
     h1 {
       margin: 0 0 var(--s-6);
-      font-family: var(--font-serif);
-      font-weight: 700;
+      font-family: var(--font-display);
+      font-weight: 400;
       font-size: var(--step-4);
       line-height: 1.25;
       letter-spacing: -0.01em;
       text-wrap: balance;
+    }
+    h1 em {
+      font-style: normal;
+      color: var(--accent);
     }
 
     .lead {
@@ -121,12 +163,12 @@
       appearance: none;
       border: 0;
       cursor: pointer;
-      min-height: 48px;
-      min-width: 48px;
+      min-height: 52px;
+      min-width: 52px;
       padding: var(--s-3) var(--s-8);
       border-radius: 999px;
       font: 500 var(--step-0)/1.4 var(--font-sans);
-      transition: transform 0.2s var(--ease), background-color 0.2s var(--ease), opacity 0.2s var(--ease);
+      transition: transform 0.2s var(--ease), background-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
     }
     .btn:focus-visible {
       outline: 3px solid var(--focus);
@@ -136,17 +178,21 @@
     .btn--primary {
       background: var(--accent);
       color: var(--on-accent);
+      font-weight: 700;
+      box-shadow: 0 8px 20px -8px var(--shadow);
     }
-    .btn--primary:hover { background: var(--accent-hover); }
+    .btn--primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
 
     .btn--quiet {
       background: transparent;
       color: var(--text-muted);
-      box-shadow: inset 0 0 0 1px var(--line);
+      box-shadow: inset 0 0 0 1.5px var(--line);
     }
-    .btn--quiet:hover { color: var(--text); box-shadow: inset 0 0 0 1px var(--text-muted); }
+    .btn--quiet:hover { color: var(--text); box-shadow: inset 0 0 0 1.5px var(--accent-soft); }
 
-    /* 자리 표시: "좋아요" 버튼이 떠나도 레이아웃이 흔들리지 않도록 */
     .slot { display: inline-block; }
 
     /* 도망 다니는 버튼 */
@@ -155,8 +201,14 @@
       left: 0;
       top: 0;
       z-index: 10;
-      transition: transform 0.28s var(--ease), background-color 0.2s var(--ease);
+      transition: transform 0.3s var(--ease), background-color 0.2s var(--ease);
       will-change: transform;
+    }
+    .yes-free:hover { transform: none; }
+    .yes-tired { animation: nudge 1.6s ease-in-out infinite; }
+    @keyframes nudge {
+      0%, 100% { scale: 1; }
+      50% { scale: 1.06; }
     }
 
     .hint {
@@ -170,7 +222,8 @@
     .answer[hidden], .question[hidden] { display: none; }
     .answer h2 {
       margin: 0 0 var(--s-6);
-      font-family: var(--font-serif);
+      font-family: var(--font-display);
+      font-weight: 400;
       font-size: var(--step-3);
       line-height: 1.3;
       text-wrap: balance;
@@ -178,23 +231,25 @@
     .answer h2:focus { outline: none; }
     .answer p { margin: 0 auto var(--s-12); max-width: 28rem; color: var(--text-muted); text-wrap: balance; }
 
-    .hearts { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
-    .heart {
+    /* 배경: 천천히 떠다니는 하트 */
+    .ambient, .fx { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+    .ambient { z-index: 0; }
+    .fx { z-index: 20; }
+    .bg-heart {
       position: absolute;
-      bottom: -48px;
-      color: var(--accent);
-      opacity: 0;
-      animation: rise 3.6s var(--ease) forwards;
+      opacity: 0.2;
+      animation: bob var(--dur, 9s) ease-in-out var(--delay, 0s) infinite alternate;
     }
-    @keyframes rise {
-      0%   { transform: translateY(0) scale(0.8); opacity: 0; }
-      15%  { opacity: 0.8; }
-      100% { transform: translateY(-85vh) scale(1.1); opacity: 0; }
+    @keyframes bob {
+      from { transform: translateY(0) rotate(var(--rot, 0deg)); }
+      to   { transform: translateY(-24px) rotate(calc(var(--rot, 0deg) + 8deg)); }
     }
+    .pop { position: absolute; left: 0; top: 0; will-change: transform, opacity; }
+    .pop svg, .bg-heart svg { display: block; width: 100%; height: 100%; fill: currentColor; }
 
     @media (prefers-reduced-motion: reduce) {
       .btn, .yes-free { transition: none; }
-      .heart { display: none; }
+      .mascot, .bg-heart, .yes-tired { animation: none; }
     }
 
     .sr-only {
@@ -204,10 +259,26 @@
   </style>
 </head>
 <body>
+  <div class="ambient" id="ambient" aria-hidden="true"></div>
+
   <main>
+    <svg class="mascot" id="mascot" viewBox="0 0 32 30" role="img" aria-label="두근거리는 하트">
+      <path fill="currentColor" d="M16 29C4 20 1 14 1 9.5a7.5 7.5 0 0 1 15-2.6A7.5 7.5 0 0 1 31 9.5c0 4.500-3 10.500-15 19.500z"/>
+      <g class="eye-open">
+        <circle class="face" cx="11.500" cy="13" r="1.700"/>
+        <circle class="face" cx="20.500" cy="13" r="1.700"/>
+      </g>
+      <g class="eye-happy">
+        <path d="M9.800 13.600q1.700-2.600 3.400 0M18.800 13.600q1.700-2.600 3.400 0"/>
+      </g>
+      <ellipse class="cheek" cx="8.500" cy="16.500" rx="2.200" ry="1.400"/>
+      <ellipse class="cheek" cx="23.500" cy="16.500" rx="2.200" ry="1.400"/>
+      <path d="M14 17.200q2 2 4 0" fill="none" stroke="oklch(32% 0.05 10)" stroke-width="1.400" stroke-linecap="round"/>
+    </svg>
+
     <section class="question" id="question">
       <p class="eyebrow">딱 한 가지만 물어볼게요</p>
-      <h1 id="title">저랑 데이트 할래요?</h1>
+      <h1 id="title"><span id="nameSlot"></span>저랑 <em>데이트</em> 할래요?</h1>
       <p class="lead">맛있는 거 먹고, 같이 걷고, 시시한 얘기를 오래 하고 싶어요.</p>
 
       <div class="actions">
@@ -227,7 +298,7 @@
     </section>
   </main>
 
-  <div class="hearts" id="hearts" aria-hidden="true"></div>
+  <div class="fx" id="fx" aria-hidden="true"></div>
 
   <script>
     // 여기만 바꾸면 돼요. name을 채우면 질문 앞에 이름이 붙어요. (예: "지민아, 저랑 데이트 할래요?")
@@ -238,11 +309,105 @@
     };
 
     const $ = (id) => document.getElementById(id);
-    const yes = $("yes"), slot = $("slot"), think = $("think"), hint = $("hint");
+    const yes = $("yes"), slot = $("slot"), think = $("think"), hint = $("hint"), fx = $("fx");
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (CONFIG.name) $("title").textContent = `${CONFIG.name}, 저랑 데이트 할래요?`;
+    if (CONFIG.name) $("nameSlot").textContent = `${CONFIG.name}, `;
 
+    /* ---------- 하트 ---------- */
+    const HEART_SVG = '<svg viewBox="0 0 32 30" aria-hidden="true"><path d="M16 29C4 20 1 14 1 9.5a7.5 7.5 0 0 1 15-2.6A7.5 7.5 0 0 1 31 9.5c0 4.500-3 10.500-15 19.500z"/></svg>';
+    const COLORS = ["var(--h1)", "var(--h2)", "var(--h3)", "var(--h4)"];
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+    function makeHeart(cls, size, color) {
+      const el = document.createElement("span");
+      el.className = cls;
+      el.innerHTML = HEART_SVG;
+      el.style.width = el.style.height = size + "px";
+      el.style.color = color;
+      return el;
+    }
+
+    // 한 점에서 하트가 뿅 터짐
+    function burst(x, y, n = 7, spread = 90) {
+      if (reduceMotion) return;
+      for (let i = 0; i < n; i++) {
+        const size = rand(12, 26);
+        const el = makeHeart("pop", size, pick(COLORS));
+        fx.appendChild(el);
+        const a = rand(-Math.PI, 0) + rand(-0.4, 0.4); // 위쪽 반원으로 퍼짐
+        const d = rand(spread * 0.5, spread);
+        const dx = Math.cos(a) * d, dy = Math.sin(a) * d - rand(0, 20);
+        const rot = rand(-30, 30);
+        const base = `translate(${x - size / 2}px, ${y - size / 2}px)`;
+        el.animate([
+          { transform: `${base} scale(0.2)`, opacity: 0 },
+          { transform: `${base} translate(${dx * 0.5}px, ${dy * 0.5}px) scale(1.1) rotate(${rot / 2}deg)`, opacity: 1, offset: 0.35 },
+          { transform: `${base} translate(${dx}px, ${dy + 24}px) scale(0.9) rotate(${rot}deg)`, opacity: 0 },
+        ], { duration: rand(800, 1300), easing: "cubic-bezier(0.2, 0.8, 0.3, 1)" }).onfinish = () => el.remove();
+      }
+    }
+
+    // 커서를 따라 작은 하트가 한 개씩 떠오름
+    let lastTrail = 0;
+    function trail(x, y) {
+      if (reduceMotion) return;
+      const now = performance.now();
+      if (now - lastTrail < 90) return;
+      lastTrail = now;
+      const size = rand(10, 16);
+      const el = makeHeart("pop", size, pick(COLORS));
+      fx.appendChild(el);
+      const base = `translate(${x - size / 2 + rand(-6, 6)}px, ${y - size / 2}px)`;
+      el.animate([
+        { transform: `${base} scale(0.5)`, opacity: 0.9 },
+        { transform: `${base} translate(${rand(-14, 14)}px, -44px) scale(1)`, opacity: 0 },
+      ], { duration: 900, easing: "ease-out" }).onfinish = () => el.remove();
+    }
+
+    // 성공 시 하트 비
+    function rain() {
+      if (reduceMotion) return;
+      const w = document.documentElement.clientWidth, h = window.innerHeight;
+      for (let i = 0; i < 36; i++) {
+        const size = rand(14, 34);
+        const el = makeHeart("pop", size, pick(COLORS));
+        fx.appendChild(el);
+        const x = rand(0, w - size), delay = rand(0, 1800);
+        const sway = rand(-40, 40);
+        el.animate([
+          { transform: `translate(${x}px, ${h + 20}px) scale(0.8) rotate(0deg)`, opacity: 0 },
+          { opacity: 1, offset: 0.15 },
+          { transform: `translate(${x + sway}px, ${-size - 20}px) scale(1.1) rotate(${rand(-25, 25)}deg)`, opacity: 0.9 },
+        ], { duration: rand(2800, 4200), delay, easing: "cubic-bezier(0.3, 0.2, 0.4, 1)", fill: "backwards" })
+          .onfinish = () => el.remove();
+      }
+      burst(w / 2, h * 0.35, 18, 220);
+    }
+
+    // 배경에 천천히 떠다니는 하트
+    (function ambient() {
+      const box = $("ambient");
+      for (let i = 0; i < 14; i++) {
+        const size = rand(20, 56);
+        const el = makeHeart("bg-heart", size, pick(COLORS));
+        el.style.left = rand(2, 96) + "%";
+        el.style.top = rand(4, 90) + "%";
+        el.style.setProperty("--dur", rand(7, 12).toFixed(1) + "s");
+        el.style.setProperty("--delay", (-rand(0, 8)).toFixed(1) + "s");
+        el.style.setProperty("--rot", rand(-20, 20).toFixed(0) + "deg");
+        box.appendChild(el);
+      }
+    })();
+
+    window.addEventListener("pointermove", (e) => {
+      if (e.pointerType === "mouse") trail(e.clientX, e.clientY);
+    });
+    // 화면 어디든 누르면 하트가 뿅
+    window.addEventListener("pointerdown", (e) => burst(e.clientX, e.clientY, 6, 70));
+
+    /* ---------- 도망가는 "좋아요" ---------- */
     const dodgeLines = [
       "어, 방금 버튼이 움직인 것 같은데요.",
       "손이 미끄러졌나 봐요. 다시 눌러봐요.",
@@ -260,7 +425,6 @@
 
     let dodges = 0, thinks = 0, free = false, tired = false, lastDodge = 0;
 
-    // 버튼을 자리 표시 위치에 고정한 뒤 화면 전체를 돌아다닐 수 있게 전환
     function release() {
       const r = yes.getBoundingClientRect();
       slot.style.width = r.width + "px";
@@ -296,6 +460,10 @@
       if (now - lastDodge < 140) return;
       lastDodge = now;
 
+      // 떠나는 자리에 하트가 뿅
+      const from = yes.getBoundingClientRect();
+      burst(from.left + from.width / 2, from.top + from.height / 2, 6, 80);
+
       if (!free) release();
       const { pad, maxX, maxY } = bounds();
       const w = yes.offsetWidth, h = yes.offsetHeight;
@@ -322,17 +490,16 @@
     function settle() {
       tired = true;
       yes.textContent = "좋아요 (이제 눌러도 돼요)";
+      yes.classList.add("yes-tired");
       hint.textContent = "버튼이 지쳐서 멈췄어요. 이제 잡을 수 있어요.";
-      // 글자가 길어져 화면 밖으로 나가지 않도록 위치 보정
-      requestAnimationFrame(clamp);
+      requestAnimationFrame(clamp); // 글자가 길어져도 화면 안에 머물도록 보정
     }
 
     function clamp() {
       if (!free) return;
       const { pad, maxX, maxY } = bounds();
-      const x = Math.min(Math.max(+yes.dataset.x, pad), maxX);
-      const y = Math.min(Math.max(+yes.dataset.y, pad), maxY);
-      place(x, y);
+      place(Math.min(Math.max(+yes.dataset.x, pad), maxX),
+            Math.min(Math.max(+yes.dataset.y, pad), maxY));
     }
 
     // 마우스: 버튼에 가까워지면 피함
@@ -366,22 +533,9 @@
       $("question").hidden = true;
       yes.classList.remove("yes-free");
       $("answer").hidden = false;
+      $("mascot").classList.add("is-happy");
       $("answerTitle").focus();
-      if (!reduceMotion) confetti();
-    }
-
-    function confetti() {
-      const box = $("hearts");
-      for (let i = 0; i < 16; i++) {
-        const h = document.createElement("span");
-        h.className = "heart";
-        h.textContent = "♥";
-        h.style.left = Math.random() * 100 + "%";
-        h.style.fontSize = 16 + Math.round(Math.random() * 3) * 8 + "px";
-        h.style.animationDelay = Math.random() * 1.2 + "s";
-        box.appendChild(h);
-      }
-      setTimeout(() => box.replaceChildren(), 5500);
+      rain();
     }
 
     $("share").addEventListener("click", async (e) => {
