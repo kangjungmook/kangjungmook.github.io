@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
-  <title>저랑 데이트 할래요?</title>
-  <meta name="description" content="딱 한 가지만 물어볼게요.">
+  <title>수빈아 데이트하자</title>
+  <meta name="description" content="수빈에게 온 초대장">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -205,11 +205,6 @@
       will-change: transform;
     }
     .yes-free:hover { transform: none; }
-    .yes-tired { animation: nudge 1.6s ease-in-out infinite; }
-    @keyframes nudge {
-      0%, 100% { scale: 1; }
-      50% { scale: 1.06; }
-    }
 
     .hint {
       min-height: calc(var(--step-0) * 1.7);
@@ -249,7 +244,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       .btn, .yes-free { transition: none; }
-      .mascot, .bg-heart, .yes-tired { animation: none; }
+      .mascot, .bg-heart { animation: none; }
     }
 
     .sr-only {
@@ -277,9 +272,9 @@
     </svg>
 
     <section class="question" id="question">
-      <p class="eyebrow">딱 한 가지만 물어볼게요</p>
-      <h1 id="title"><span id="nameSlot"></span>저랑 <em>데이트</em> 할래요?</h1>
-      <p class="lead">맛있는 거 먹고, 같이 걷고, 시시한 얘기를 오래 하고 싶어요.</p>
+      <p class="eyebrow">수빈에게 초대장이 도착했어요</p>
+      <h1 id="title">수빈아 <em>데이트</em>하자~~</h1>
+      <p class="lead">11월 8일에 알지~?</p>
 
       <div class="actions">
         <span class="slot" id="slot">
@@ -293,7 +288,7 @@
 
     <section class="answer" id="answer" hidden>
       <h2 id="answerTitle" tabindex="-1">고마워요, 정말 기뻐요.</h2>
-      <p>이제 언제, 어디서 만날지만 정하면 돼요. 가고 싶은 곳이 있다면 먼저 말해줘요.</p>
+      <p>11월 8일에 만나요. 가고 싶은 곳이 있다면 먼저 말해줘요.</p>
       <button type="button" class="btn btn--primary" id="share">기쁜 소식 전하기</button>
     </section>
   </main>
@@ -301,18 +296,9 @@
   <div class="fx" id="fx" aria-hidden="true"></div>
 
   <script>
-    // 여기만 바꾸면 돼요. name을 채우면 질문 앞에 이름이 붙어요. (예: "지민아, 저랑 데이트 할래요?")
-    const CONFIG = {
-      name: "",
-      // 도망 횟수가 이 값에 닿으면 버튼이 지쳐서 멈춰요.
-      maxDodges: 7,
-    };
-
     const $ = (id) => document.getElementById(id);
     const yes = $("yes"), slot = $("slot"), think = $("think"), hint = $("hint"), fx = $("fx");
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (CONFIG.name) $("nameSlot").textContent = `${CONFIG.name}, `;
 
     /* ---------- 하트 ---------- */
     const HEART_SVG = '<svg viewBox="0 0 32 30" aria-hidden="true"><path d="M16 29C4 20 1 14 1 9.5a7.5 7.5 0 0 1 15-2.6A7.5 7.5 0 0 1 31 9.5c0 4.500-3 10.500-15 19.500z"/></svg>';
@@ -414,8 +400,9 @@
       "버튼도 부끄러운가 봐요.",
       "거의 잡았어요!",
       "저 버튼, 생각보다 빨라요.",
-      "슬슬 숨이 차는 것 같아요.",
-      "한 번만 더 도망가고 쉴게요.",
+      "11월 8일, 비워뒀죠?",
+      "도망가도 마음은 같아요.",
+      "한 번만 더 해봐요.",
     ];
     const thinkLines = [
       "생각은 3초면 충분하다고 들었어요.",
@@ -423,7 +410,7 @@
       "…근데 오래는 못 기다려요.",
     ];
 
-    let dodges = 0, thinks = 0, free = false, tired = false, lastDodge = 0;
+    let dodges = 0, thinks = 0, free = false, lastDodge = 0, thinkAccepts = false;
 
     function release() {
       const r = yes.getBoundingClientRect();
@@ -455,7 +442,6 @@
     }
 
     function dodge(px, py) {
-      if (tired) return;
       const now = performance.now();
       if (now - lastDodge < 140) return;
       lastDodge = now;
@@ -467,15 +453,15 @@
       if (!free) release();
       const { pad, maxX, maxY } = bounds();
       const w = yes.offsetWidth, h = yes.offsetHeight;
-      const avoid = think.getBoundingClientRect();
+      const avoids = [think, hint].map((el) => el.getBoundingClientRect());
 
       let best = null, bestDist = -1;
       for (let i = 0; i < 40; i++) {
         const x = pad + Math.random() * (maxX - pad);
         const y = pad + Math.random() * (maxY - pad);
         const dist = Math.hypot(x + w / 2 - px, y + h / 2 - py);
-        const overlaps = x < avoid.right + 8 && x + w > avoid.left - 8 &&
-                         y < avoid.bottom + 8 && y + h > avoid.top - 8;
+        const overlaps = avoids.some((a) => x < a.right + 8 && x + w > a.left - 8 &&
+                                            y < a.bottom + 8 && y + h > a.top - 8);
         if (overlaps) continue;
         if (dist > bestDist) { best = { x, y }; bestDist = dist; }
         if (dist > 220) break;
@@ -483,16 +469,7 @@
       if (best) place(best.x, best.y);
 
       dodges++;
-      hint.textContent = dodgeLines[Math.min(dodges - 1, dodgeLines.length - 1)];
-      if (dodges >= CONFIG.maxDodges) settle();
-    }
-
-    function settle() {
-      tired = true;
-      yes.textContent = "좋아요 (이제 눌러도 돼요)";
-      yes.classList.add("yes-tired");
-      hint.textContent = "버튼이 지쳐서 멈췄어요. 이제 잡을 수 있어요.";
-      requestAnimationFrame(clamp); // 글자가 길어져도 화면 안에 머물도록 보정
+      hint.textContent = dodgeLines[(dodges - 1) % dodgeLines.length];
     }
 
     function clamp() {
@@ -504,7 +481,7 @@
 
     // 마우스: 버튼에 가까워지면 피함
     window.addEventListener("pointermove", (e) => {
-      if (e.pointerType !== "mouse" || tired) return;
+      if (e.pointerType !== "mouse") return;
       const r = yes.getBoundingClientRect();
       const dx = Math.max(r.left - e.clientX, 0, e.clientX - r.right);
       const dy = Math.max(r.top - e.clientY, 0, e.clientY - r.bottom);
@@ -513,20 +490,26 @@
 
     // 터치: 닿는 순간 피함
     yes.addEventListener("pointerdown", (e) => {
-      if (tired) return;
       e.preventDefault();
       dodge(e.clientX, e.clientY);
     });
 
     yes.addEventListener("click", (e) => {
-      // 키보드(Enter/Space)로는 항상 누를 수 있어요. 포인터로는 지치기 전까지 막아요.
-      if (!tired && e.detail !== 0) { e.preventDefault(); return; }
+      // 마우스·터치로는 절대 못 눌러요. 키보드(Enter/Space)로만 눌려요. (접근성)
+      if (e.detail !== 0) { e.preventDefault(); return; }
       accept();
     });
 
+    // "생각해볼게요"를 3번 누르면 11월 8일에 만나자는 대답으로 바뀌어요.
     think.addEventListener("click", () => {
-      hint.textContent = thinkLines[thinks % thinkLines.length];
+      if (thinkAccepts) { accept(); return; }
+      hint.textContent = thinkLines[thinks];
       thinks++;
+      if (thinks >= thinkLines.length) {
+        thinkAccepts = true;
+        think.textContent = "알겠어요, 11월 8일에 만나요";
+        think.classList.replace("btn--quiet", "btn--primary");
+      }
     });
 
     function accept() {
@@ -539,7 +522,7 @@
     }
 
     $("share").addEventListener("click", async (e) => {
-      const text = "좋아요, 저랑 데이트해요!";
+      const text = "좋아요, 11월 8일에 데이트해요!";
       try {
         if (navigator.share) { await navigator.share({ text }); return; }
         await navigator.clipboard.writeText(text);
